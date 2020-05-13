@@ -119,7 +119,11 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+// 给容器中导入 AspectJAutoProxyRegistrar，利用 AspectJAutoProxyRegistrar 自定义给容器中注册 bean；BeanDefinetion
+// internalAutoProxyCreator=AnnotationAwareAspectJAutoProxyCreator -- 前面是 Bean 名称，后面是 Bean 类型
+// 给容器中注册一个AnnotationAwareAspectJAutoProxyCreator；
 @Import(AspectJAutoProxyRegistrar.class)
+// 用于开启基于注解的AOP模式
 public @interface EnableAspectJAutoProxy {
 
 	/**

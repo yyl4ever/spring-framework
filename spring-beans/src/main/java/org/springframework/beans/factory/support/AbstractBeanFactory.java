@@ -246,6 +246,8 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		Object bean;
 
 		// Eagerly check singleton cache for manually registered singletons.
+		// 先从缓存中提前检查是否已经注册了单例 Bean，如能获取到则说明 Bean 提前创建过了
+		// 这种做法，保证了Bean只会被创建一次 -- 只要创建了 Bean 都会被缓存
 		Object sharedInstance = getSingleton(beanName);
 		if (sharedInstance != null && args == null) {
 			if (logger.isTraceEnabled()) {
@@ -317,9 +319,11 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 				}
 
 				// Create bean instance.
+				// 获取单例 Bean
 				if (mbd.isSingleton()) {
 					sharedInstance = getSingleton(beanName, () -> {
 						try {
+							// 如果获取不到就创建 Bean(同样，获取不到BeanPostProcess也会创建)
 							return createBean(beanName, mbd, args);
 						}
 						catch (BeansException ex) {

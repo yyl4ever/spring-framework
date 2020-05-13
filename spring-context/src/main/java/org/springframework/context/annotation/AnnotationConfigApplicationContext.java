@@ -83,9 +83,12 @@ public class AnnotationConfigApplicationContext extends GenericApplicationContex
 	 * @param componentClasses one or more component classes &mdash; for example,
 	 * {@link Configuration @Configuration} classes
 	 */
+	// 创建 IOC 容器
 	public AnnotationConfigApplicationContext(Class<?>... componentClasses) {
 		this();
+		// 注册配置类
 		register(componentClasses);
+		// 刷新容器
 		refresh();
 	}
 
