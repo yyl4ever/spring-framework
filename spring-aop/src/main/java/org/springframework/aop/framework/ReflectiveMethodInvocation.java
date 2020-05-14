@@ -155,10 +155,22 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 	}
 
 
+	/**
+	 * 正常执行：前置通知--目标方法--后置通知--返回通知
+	 * 出现异常：前置通知--目标方法--后置通知--异常通知
+	 * @return
+	 * @throws Throwable
+	 */
 	@Override
 	@Nullable
 	public Object proceed() throws Throwable {
 		// We start with an index of -1 and increment early.
+		// currentInterceptorIndex:记录当前拦截器的索引，从-1开始
+		// 如果没有拦截器则直接执行目标方法
+		// 如果拦截器的索引和拦截器数组大小-1相等（执行到了最后一个拦截器）则直接执行目标方法
+		// 每次执行 proceed，索引都会自增
+		// 总结：链式获取拦截器，拦截器执行invoke方法，每个拦截器等待下一个拦截器执行完成返回后再来执行，拦截器链的机制，
+		// 来保证通知方法和目标方法的执行顺序
 		if (this.currentInterceptorIndex == this.interceptorsAndDynamicMethodMatchers.size() - 1) {
 			return invokeJoinpoint();
 		}
@@ -183,6 +195,7 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 		else {
 			// It's an interceptor, so we just invoke it: The pointcut will have
 			// been evaluated statically before this object was constructed.
+			// 执行拦截器的方法，比如org.springframework.aop.framework.adapter.AfterReturningAdviceInterceptor.invoke
 			return ((MethodInterceptor) interceptorOrInterceptionAdvice).invoke(this);
 		}
 	}

@@ -89,6 +89,7 @@ public final class ExposeInvocationInterceptor implements MethodInterceptor, Pri
 
 	@Override
 	public Object invoke(MethodInvocation mi) throws Throwable {
+		// ThreadLocal
 		MethodInvocation oldInvocation = invocation.get();
 		invocation.set(mi);
 		try {

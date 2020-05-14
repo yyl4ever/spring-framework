@@ -306,7 +306,9 @@ public abstract class AopUtils {
 		if (candidateAdvisors.isEmpty()) {
 			return candidateAdvisors;
 		}
+		// LinkedList?
 		List<Advisor> eligibleAdvisors = new ArrayList<>();
+		// 遍历增强器
 		for (Advisor candidate : candidateAdvisors) {
 			if (candidate instanceof IntroductionAdvisor && canApply(candidate, clazz)) {
 				eligibleAdvisors.add(candidate);
@@ -318,6 +320,7 @@ public abstract class AopUtils {
 				// already processed
 				continue;
 			}
+			// 判断是否能用
 			if (canApply(candidate, clazz, hasIntroductions)) {
 				eligibleAdvisors.add(candidate);
 			}
