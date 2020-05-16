@@ -28,6 +28,8 @@ import org.springframework.lang.Nullable;
  * @since 2.0.7
  */
 @SuppressWarnings("serial")
+// 利用后置处理器在对象创建完成后，包装对象，返回一个代理对象（增强器），代理对象执行方法利用拦截器链进行调用，往父类追溯
+// org.springframework.aop.framework.autoproxy.AbstractAutoProxyCreator.postProcessAfterInitialization
 public class InfrastructureAdvisorAutoProxyCreator extends AbstractAdvisorAutoProxyCreator {
 
 	@Nullable

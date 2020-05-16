@@ -45,6 +45,9 @@ public class TransactionManagementConfigurationSelector extends AdviceModeImport
 	 */
 	@Override
 	protected String[] selectImports(AdviceMode adviceMode) {
+		// org.springframework.transaction.annotation.EnableTransactionManagement.mode 中定义了 AdviceMode,
+		// 默认是 AdviceMode.PROXY, 也就是说会导入AutoProxyRegistrar、ProxyTransactionManagementConfiguration,
+		// 分析这两个类做了些什么事情
 		switch (adviceMode) {
 			case PROXY:
 				return new String[] {AutoProxyRegistrar.class.getName(),

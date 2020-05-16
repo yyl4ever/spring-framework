@@ -51,6 +51,7 @@ import org.springframework.transaction.TransactionManager;
  * @see org.springframework.aop.framework.ProxyFactory
  */
 @SuppressWarnings("serial")
+// 熟悉的 MethodInterceptor，之前的四种增强器最终都是 MethodInterceptor，在目标方法执行的时候，执行拦截器链
 public class TransactionInterceptor extends TransactionAspectSupport implements MethodInterceptor, Serializable {
 
 	/**
@@ -115,6 +116,7 @@ public class TransactionInterceptor extends TransactionAspectSupport implements 
 		Class<?> targetClass = (invocation.getThis() != null ? AopUtils.getTargetClass(invocation.getThis()) : null);
 
 		// Adapt to TransactionAspectSupport's invokeWithinTransaction...
+		// 点进去
 		return invokeWithinTransaction(invocation.getMethod(), targetClass, invocation::proceed);
 	}
 

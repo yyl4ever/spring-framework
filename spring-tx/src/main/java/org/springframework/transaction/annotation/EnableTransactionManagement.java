@@ -152,6 +152,8 @@ import org.springframework.core.Ordered;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
+// 利用TransactionManagementConfigurationSelector给容器导入组件
+// TransactionManagementConfigurationSelector 会返回要导入组件的全类名
 @Import(TransactionManagementConfigurationSelector.class)
 public @interface EnableTransactionManagement {
 
