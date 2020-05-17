@@ -60,6 +60,7 @@ import org.springframework.util.CollectionUtils;
  * @see EventListenerFactory
  * @see DefaultEventListenerFactory
  */
+
 public class EventListenerMethodProcessor
 		implements SmartInitializingSingleton, ApplicationContextAware, BeanFactoryPostProcessor {
 
@@ -97,6 +98,7 @@ public class EventListenerMethodProcessor
 	}
 
 
+	// 实现 SmartInitializingSingleton 接口
 	@Override
 	public void afterSingletonsInstantiated() {
 		ConfigurableListableBeanFactory beanFactory = this.beanFactory;

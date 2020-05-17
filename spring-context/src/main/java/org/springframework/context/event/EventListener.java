@@ -82,6 +82,7 @@ import org.springframework.core.annotation.AliasFor;
  * @author Stephane Nicoll
  * @author Sam Brannen
  * @since 4.2
+ * 查看这个类 EventListenerMethodProcessor
  * @see EventListenerMethodProcessor
  */
 @Target({ElementType.METHOD, ElementType.ANNOTATION_TYPE})

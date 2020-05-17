@@ -912,6 +912,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					}, getAccessControlContext());
 				}
 				else {
+					// 会执行 org.springframework.context.event.EventListenerMethodProcessor.afterSingletonsInstantiated
 					smartSingleton.afterSingletonsInstantiated();
 				}
 			}
