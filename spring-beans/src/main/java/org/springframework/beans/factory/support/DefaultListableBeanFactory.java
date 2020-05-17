@@ -867,13 +867,17 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 		// Iterate over a copy to allow for init methods which in turn register new bean definitions.
 		// While this may not be part of the regular factory bootstrap, it does otherwise work fine.
 		// 容器中所有Bean定义的名称
+		// 拿到所有的Bean定义信息
 		List<String> beanNames = new ArrayList<>(this.beanDefinitionNames);
 
 		// Trigger initialization of all non-lazy singleton beans...
-		// 遍历容器所有的 Bean，依次调用 getBean(beanName) 创建对象
+		// 遍历容器所有的 Bean，依次调用 getBean(beanName) 初始化创建对象
 		for (String beanName : beanNames) {
+			// bean 的定义信息
 			RootBeanDefinition bd = getMergedLocalBeanDefinition(beanName);
+			// 不是抽象、是单例、不是懒加载（用到的时候才加载）
 			if (!bd.isAbstract() && bd.isSingleton() && !bd.isLazyInit()) {
+				// 判断是不是 FactoryBean（工厂Bean），是的话会利用 FactoryBean 的 getObject 来创建对象
 				if (isFactoryBean(beanName)) {
 					Object bean = getBean(FACTORY_BEAN_PREFIX + beanName);
 					if (bean instanceof FactoryBean) {
@@ -894,12 +898,15 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					}
 				}
 				else {
-					// 点进去
+					// 如果不是工厂Bean，点进去
+					// 我们的一些常规bean就是在这里创建的
 					getBean(beanName);
 				}
 			}
 		}
 
+		// 所有bean都利用getBean创建完成后，
+		// 检查所有的bean是否是 SmartInitializingSingleton 实现类
 		// Trigger post-initialization callback for all applicable beans...
 		for (String beanName : beanNames) {
 			Object singletonInstance = getSingleton(beanName);
@@ -912,7 +919,7 @@ public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFacto
 					}, getAccessControlContext());
 				}
 				else {
-					// 会执行 org.springframework.context.event.EventListenerMethodProcessor.afterSingletonsInstantiated
+					// 如果是 SmartInitializingSingleton 实现，就会执行 org.springframework.context.event.EventListenerMethodProcessor.afterSingletonsInstantiated
 					smartSingleton.afterSingletonsInstantiated();
 				}
 			}
