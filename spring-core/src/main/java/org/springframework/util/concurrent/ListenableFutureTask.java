@@ -63,6 +63,7 @@ public class ListenableFutureTask<T> extends FutureTask<T> implements Listenable
 
 	@Override
 	public void addCallback(SuccessCallback<? super T> successCallback, FailureCallback failureCallback) {
+		// 暂存回调到 ListenableFutureCallbackRegistry 中
 		this.callbacks.addSuccessCallback(successCallback);
 		this.callbacks.addFailureCallback(failureCallback);
 	}
@@ -80,23 +81,29 @@ public class ListenableFutureTask<T> extends FutureTask<T> implements Listenable
 	protected void done() {
 		Throwable cause;
 		try {
+			// <1> 获得执行结果
 			T result = get();
+			// <2.1> 执行成功，执行成功的回调
 			this.callbacks.success(result);
 			return;
 		}
 		catch (InterruptedException ex) {
+			// 如果有中断异常 InterruptedException ，则打断当前线程，并直接返回
 			Thread.currentThread().interrupt();
 			return;
 		}
 		catch (ExecutionException ex) {
+			// 如果有 ExecutionException 异常，获得其真实的异常，并设置到 cause 中
 			cause = ex.getCause();
 			if (cause == null) {
 				cause = ex;
 			}
 		}
 		catch (Throwable ex) {
+			// 设置异常到 cause 中
 			cause = ex;
 		}
+		// 执行异常，执行异常的回调
 		this.callbacks.failure(cause);
 	}
 

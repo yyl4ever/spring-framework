@@ -350,6 +350,7 @@ public abstract class ClassUtils {
 	 * (typically a missing dependency declaration in a Jigsaw module definition
 	 * for a superclass or interface implemented by the class to be checked here)
 	 */
+	// 判断所提供的类名的类是否存在，且可以被加载。
 	public static boolean isPresent(String className, @Nullable ClassLoader classLoader) {
 		try {
 			forName(className, classLoader);

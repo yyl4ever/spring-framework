@@ -25,6 +25,7 @@ package org.springframework.util.concurrent;
  * @since 4.0
  * @param <T> the result type
  */
+// ListenableFutureCallback 接口，同时继承 SuccessCallback 和 FailureCallback 接口。
 public interface ListenableFutureCallback<T> extends SuccessCallback<T>, FailureCallback {
 
 }

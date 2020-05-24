@@ -184,6 +184,7 @@ public interface WebApplicationInitializer {
 	 * @throws ServletException if any call against the given {@code ServletContext}
 	 * throws a {@code ServletException}
 	 */
+	// 默认有三个子类实现
 	void onStartup(ServletContext servletContext) throws ServletException;
 
 }

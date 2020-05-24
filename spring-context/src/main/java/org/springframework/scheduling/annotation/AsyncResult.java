@@ -46,6 +46,8 @@ import org.springframework.util.concurrent.SuccessCallback;
  * @see #forValue(Object)
  * @see #forExecutionException(Throwable)
  */
+// AsyncResult 实现了 ListenableFuture 接口，提供异步执行结果的回调处理
+// ListenableFuture 继承了 Future 接口，所以 AsyncResult 也需要实现 Future 接口
 public class AsyncResult<V> implements ListenableFuture<V> {
 
 	@Nullable
@@ -75,27 +77,32 @@ public class AsyncResult<V> implements ListenableFuture<V> {
 
 	@Override
 	public boolean cancel(boolean mayInterruptIfRunning) {
+		// 因为是 AsyncResult 是执行结果，所以直接返回 false 表示取消失败。
 		return false;
 	}
 
 	@Override
 	public boolean isCancelled() {
+		// 因为是 AsyncResult 是执行结果，所以直接返回 false 表示未取消。
 		return false;
 	}
 
 	@Override
 	public boolean isDone() {
+		// 因为是 AsyncResult 是执行结果，所以直接返回 true 表示已完成。
 		return true;
 	}
 
 	@Override
 	@Nullable
 	public V get() throws ExecutionException {
+		// 如果发生异常，则抛出该异常。
 		if (this.executionException != null) {
 			throw (this.executionException instanceof ExecutionException ?
 					(ExecutionException) this.executionException :
 					new ExecutionException(this.executionException));
 		}
+		// 如果执行成功，则返回该 value 结果
 		return this.value;
 	}
 
@@ -114,13 +121,17 @@ public class AsyncResult<V> implements ListenableFuture<V> {
 	public void addCallback(SuccessCallback<? super V> successCallback, FailureCallback failureCallback) {
 		try {
 			if (this.executionException != null) {
+				// 如果是异常的结果，调用 FailureCallback 的回调。
 				failureCallback.onFailure(exposedException(this.executionException));
 			}
 			else {
+				// 如果是正常的结果，调用 SuccessCallback 的回调。
 				successCallback.onSuccess(this.value);
 			}
 		}
 		catch (Throwable ex) {
+			// 如果回调的逻辑发生异常，直接忽略。
+			// 所以，如果如果有多个回调，如果有一个回调发生异常，不会影响后续的回调。
 			// Ignore
 		}
 	}
@@ -128,6 +139,7 @@ public class AsyncResult<V> implements ListenableFuture<V> {
 	@Override
 	public CompletableFuture<V> completable() {
 		if (this.executionException != null) {
+			// 直接将结果包装成 CompletableFuture 对象。
 			CompletableFuture<V> completable = new CompletableFuture<>();
 			completable.completeExceptionally(exposedException(this.executionException));
 			return completable;
@@ -166,6 +178,7 @@ public class AsyncResult<V> implements ListenableFuture<V> {
 	 * @param original the original as given to {@link #forExecutionException}
 	 * @return the exposed exception
 	 */
+	// 从 ExecutionException 中，获得原始异常。
 	private static Throwable exposedException(Throwable original) {
 		if (original instanceof ExecutionException) {
 			Throwable cause = original.getCause();
