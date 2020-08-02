@@ -15,7 +15,7 @@
  */
 
 package org.springframework.util.concurrent;
-
+Filter
 /**
  * Callback mechanism for the outcome, success or failure, from a
  * {@link ListenableFuture}.

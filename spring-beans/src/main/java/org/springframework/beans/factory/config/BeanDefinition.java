@@ -38,6 +38,7 @@ import org.springframework.lang.Nullable;
  * @see org.springframework.beans.factory.support.RootBeanDefinition
  * @see org.springframework.beans.factory.support.ChildBeanDefinition
  */
+// Bean 配 置信息中配置的 POJO 对象在 Spring IoC 容器中的映射
 public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 
 	/**

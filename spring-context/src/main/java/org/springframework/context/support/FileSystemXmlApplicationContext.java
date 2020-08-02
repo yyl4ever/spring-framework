@@ -158,6 +158,8 @@ public class FileSystemXmlApplicationContext extends AbstractXmlApplicationConte
 		if (path.startsWith("/")) {
 			path = path.substring(1);
 		}
+		// //这里使用 文件系统资源对象来定义 Bean 文件
+		// 通过子类的覆盖巧妙地将类路径变成了文件路径
 		return new FileSystemResource(path);
 	}
 

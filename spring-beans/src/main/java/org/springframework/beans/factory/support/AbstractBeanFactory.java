@@ -727,8 +727,10 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 
 	@Override
 	public String[] getAliases(String name) {
+		// 转换名字，这个方法与FactoryBean前缀，别名转换为真名有关
 		String beanName = transformedBeanName(name);
 		List<String> aliases = new ArrayList<>();
+		// 是否是FactoryBean
 		boolean factoryPrefix = name.startsWith(FACTORY_BEAN_PREFIX);
 		String fullBeanName = beanName;
 		if (factoryPrefix) {
@@ -737,6 +739,7 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
 		if (!fullBeanName.equals(name)) {
 			aliases.add(fullBeanName);
 		}
+		// 去父类中aliasMap取值
 		String[] retrievedAliases = super.getAliases(beanName);
 		String prefix = factoryPrefix ? FACTORY_BEAN_PREFIX : "";
 		for (String retrievedAlias : retrievedAliases) {

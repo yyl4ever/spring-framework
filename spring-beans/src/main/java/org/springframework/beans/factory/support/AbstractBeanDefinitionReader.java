@@ -190,6 +190,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 		return count;
 	}
 
+	// 重载方法，调用下面的 loadBeanDefinitions(String, Set<Resource>)方法
 	@Override
 	public int loadBeanDefinitions(String location) throws BeanDefinitionStoreException {
 		return loadBeanDefinitions(location, null);
@@ -210,7 +211,10 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 	 * @see #loadBeanDefinitions(org.springframework.core.io.Resource)
 	 * @see #loadBeanDefinitions(org.springframework.core.io.Resource[])
 	 */
+	// 该方法就 做了两件事:首先，调用资源加载器的获取资源方法 resourceLoader.getResource(location)，获取要加载的资源；
+	// 其次，真正执行加载功能，由其子类 XmlBeanDefinitionReader 的 loadBeanDefinitions() 方法完成。
 	public int loadBeanDefinitions(String location, @Nullable Set<Resource> actualResources) throws BeanDefinitionStoreException {
+		// 获取在 IoC 容器初始化过程中设置的资源加载器
 		ResourceLoader resourceLoader = getResourceLoader();
 		if (resourceLoader == null) {
 			throw new BeanDefinitionStoreException(
@@ -220,7 +224,11 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 		if (resourceLoader instanceof ResourcePatternResolver) {
 			// Resource pattern matching available.
 			try {
+				//将指定位置的 Bean 配置信息解析为 Spring IoC 容器封装的资源
+				//加载多个指定位置的 Bean 配置信息
+				// getResources()方法其实在 ResourcePatternResolver 中定义
 				Resource[] resources = ((ResourcePatternResolver) resourceLoader).getResources(location);
+				//委派调用其子类 XmlBeanDefinitionReader的方法，实现加载功能
 				int count = loadBeanDefinitions(resources);
 				if (actualResources != null) {
 					Collections.addAll(actualResources, resources);
@@ -249,6 +257,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 		}
 	}
 
+	// AbstractBeanDefinitionReader 定义了载入过程
 	@Override
 	public int loadBeanDefinitions(String... locations) throws BeanDefinitionStoreException {
 		Assert.notNull(locations, "Location array must not be null");

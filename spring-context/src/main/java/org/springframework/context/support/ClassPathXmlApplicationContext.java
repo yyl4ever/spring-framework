@@ -81,6 +81,7 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 	 * @param configLocation resource location
 	 * @throws BeansException if context creation failed
 	 */
+	// ApplicationContext app = new ClassPathXmlAppl icationContext (” application.xml");
 	public ClassPathXmlApplicationContext(String configLocation) throws BeansException {
 		this(new String[] {configLocation}, true, null);
 	}
@@ -134,13 +135,19 @@ public class ClassPathXmlApplicationContext extends AbstractXmlApplicationContex
 	 * @throws BeansException if context creation failed
 	 * @see #refresh()
 	 */
+	// 入口
 	public ClassPathXmlApplicationContext(
 			String[] configLocations, boolean refresh, @Nullable ApplicationContext parent)
 			throws BeansException {
-
+		// 继承自父容器 AbstractApplicationContext
+		// 调用父容器的构造方法 super(parent)，为容器设置好 Bean 资源加载器
 		super(parent);
+		// 调用父类 AbstractRefreshableConfigApplicationContext 的 setConfigLocations(configLocations) 方法设置 Bean配置信息的定位路径
+		// 至此 ， Spring IoC 容器在初始化时，将配置的 Bean 信息定位为 Spring 封装的 Resource
 		setConfigLocations(configLocations);
 		if (refresh) {
+			// 最终都调用 refresh()方法
+			// ClassPathXmlApplicationContext通过调用 其父类 AbstractApplicationContext 的 refresh()方法启动整个 IoC 容器对 Bean 定义的载入过程。
 			refresh();
 		}
 	}

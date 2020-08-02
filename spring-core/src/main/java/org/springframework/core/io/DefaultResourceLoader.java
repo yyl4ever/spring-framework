@@ -139,7 +139,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 		this.resourceCaches.clear();
 	}
 
-
+	//获取 Resource 的具体实现方法
 	@Override
 	public Resource getResource(String location) {
 		Assert.notNull(location, "Location must not be null");
@@ -150,7 +150,7 @@ public class DefaultResourceLoader implements ResourceLoader {
 				return resource;
 			}
 		}
-
+		//如果是类路径的方式，使用 ClassPathResource 来得到 Bean 文件的资源对象
 		if (location.startsWith("/")) {
 			return getResourceByPath(location);
 		}
@@ -159,12 +159,15 @@ public class DefaultResourceLoader implements ResourceLoader {
 		}
 		else {
 			try {
+				//如果是 URL 方式 ， 使用 UrlResource 作为 Bean 文件的资源对象
 				// Try to parse the location as a URL...
 				URL url = new URL(location);
 				return (ResourceUtils.isFileURL(url) ? new FileUrlResource(url) : new UrlResource(url));
 			}
 			catch (MalformedURLException ex) {
 				// No URL -> resolve as resource path.
+				//如果既不是 classpath 标识又不是 URL 标识的 Resource 定位，则调用
+				//容器本身的 getResourceByPath()方法获取 Resource
 				return getResourceByPath(location);
 			}
 		}
@@ -181,6 +184,8 @@ public class DefaultResourceLoader implements ResourceLoader {
 	 * @see org.springframework.context.support.FileSystemXmlApplicationContext#getResourceByPath
 	 * @see org.springframework.web.context.support.XmlWebApplicationContext#getResourceByPath
 	 */
+	//DefaultResourceLoader提供了 getResourceByPath()方法的实现，就是为了处理既不是 ClassPath 标识又不是 URL标识的 Resource定位的情况。
+	// FileSystemXrnlApplication容器就重写了 getResourceByPath()
 	protected Resource getResourceByPath(String path) {
 		return new ClassPathContextResource(path, getClassLoader());
 	}

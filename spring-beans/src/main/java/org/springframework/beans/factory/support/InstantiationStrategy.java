@@ -33,6 +33,7 @@ import org.springframework.lang.Nullable;
  * @author Juergen Hoeller
  * @since 1.1
  */
+// 不同类型的类采用不同的初始化策略
 public interface InstantiationStrategy {
 
 	/**
